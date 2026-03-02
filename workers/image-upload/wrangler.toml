@@ -1,0 +1,19 @@
+name = "image-upload-worker"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+account_id = "ff26acb13be35c7f02ca60e7e3859265"
+
+[[r2_buckets]]
+binding = "IMAGES"
+bucket_name = "100sneaker-images"
+
+[vars]
+CORS_ORIGIN = "*"
+PUBLIC_URL = "https://pub-6ea55102d55f4e20a61c368581088e5c.r2.dev"
+# In production, restrict this to your domain:
+# CORS_ORIGIN = "https://100sneaker.com"
+
+# Set this secret via: wrangler secret put UPLOAD_SECRET
+# Or in Cloudflare Dashboard → Worker → Settings → Variables
+# This protects the upload endpoint from unauthorized use
