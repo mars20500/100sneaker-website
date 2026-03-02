@@ -52,7 +52,7 @@ export default function Index() {
                 <span className="flex items-center gap-1.5"><Zap className="h-4 w-4 text-warning" /> Free Shipping</span>
               </div>
             </div>
-            <div className="relative hidden md:block">
+            <div className="relative">
               <div className="hero-image-wrapper relative aspect-square rounded-3xl bg-gradient-to-br from-primary/20 to-primary/5 p-8">
                 <img src={hero.image} alt="Featured sneaker" className="hero-image h-full w-full object-contain drop-shadow-2xl" />
               </div>
