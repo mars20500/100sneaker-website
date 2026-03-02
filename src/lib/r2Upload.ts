@@ -5,8 +5,8 @@
  * Set UPLOAD_SECRET if you configured auth on the worker.
  */
 
-// ⚠️ For local dev: http://localhost:8787 | For production: your deployed Worker URL
-const WORKER_URL = "http://localhost:8787";
+// Deployed Cloudflare Worker URL
+const WORKER_URL = "https://100sneaker.tak-badr50.workers.dev";
 
 // Optional: set this if you added UPLOAD_SECRET to the Worker
 const UPLOAD_SECRET = "";

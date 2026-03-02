@@ -13,9 +13,9 @@ export function PublicFooter() {
         <div>
           <div className="flex items-center gap-2 mb-4">
             {header.logoImage ? (
-              <img src={header.logoImage} alt={header.logoText} className="h-8 w-8 rounded-lg object-contain" />
+              <img src={header.logoImage} alt={header.logoText} className="h-12 w-12 rounded-lg object-contain" />
             ) : (
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
                 <span className="text-sm font-bold text-primary-foreground">{header.logoInitials}</span>
               </div>
             )}
