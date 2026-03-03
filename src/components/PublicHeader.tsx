@@ -28,12 +28,7 @@ export function PublicHeader() {
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
-          <Link
-            to="/"
-            className={`link-glow text-sm font-medium transition-colors hover:text-primary ${location.pathname === "/" ? "text-primary" : "text-muted-foreground"}`}
-          >
-            Home
-          </Link>
+
           {header.navLinks.map((l) => (
             <Link
               key={l.label}
@@ -60,9 +55,7 @@ export function PublicHeader() {
 
       {mobileOpen && (
         <div className="border-t border-border bg-card px-4 py-4 md:hidden">
-          <Link to="/" className="block py-2 text-sm text-muted-foreground hover:text-primary" onClick={() => setMobileOpen(false)}>
-            Home
-          </Link>
+
           {header.navLinks.map((l) => (
             <Link key={l.label} to={l.url} className="block py-2 text-sm text-muted-foreground hover:text-primary" onClick={() => setMobileOpen(false)}>
               {l.label}
