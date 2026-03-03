@@ -4,6 +4,7 @@ import { ArrowLeft, User, Calendar, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getPost, BlogPostData } from "@/lib/blogService";
+import { CommentSection } from "@/components/CommentSection";
 import { format } from "date-fns";
 
 export default function BlogPost() {
@@ -75,6 +76,8 @@ export default function BlogPost() {
           className="prose prose-invert mt-10 max-w-full break-words prose-headings:font-bold prose-a:text-primary prose-img:rounded-lg prose-p:mb-4 prose-img:my-8"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
+
+        {id && <CommentSection postId={id} />}
       </div>
     </div>
   );

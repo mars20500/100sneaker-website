@@ -1,4 +1,4 @@
-import { LayoutDashboard, FileText, Bot, LogOut, Settings } from "lucide-react";
+import { LayoutDashboard, FileText, Bot, LogOut, Settings, MessageSquare } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import {
 const items = [
   { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
   { title: "Blog Posts", url: "/admin/blog", icon: FileText },
+  { title: "Comments", url: "/admin/comments", icon: MessageSquare },
   { title: "AI Scout", url: "/admin/scout", icon: Bot },
   { title: "Site Content", url: "/admin/site", icon: Settings },
 ];

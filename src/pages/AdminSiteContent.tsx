@@ -11,7 +11,7 @@ import { uploadToR2 } from "@/lib/r2Upload";
 import {
   getSiteContent, saveSiteContent, defaultSiteContent,
   type SiteContent, type NavLinkItem, type FooterColumn, type CtaButton,
-  type BrandItem, type CategoryItem,
+  type BrandItem, type CategoryItem, type ThemeSettings
 } from "@/lib/siteContentService";
 
 export default function AdminSiteContent() {
@@ -74,15 +74,21 @@ export default function AdminSiteContent() {
       </div>
 
       <Tabs defaultValue="header" className="w-full">
-        <TabsList className="grid w-full grid-cols-7">
-          <TabsTrigger value="header">Header</TabsTrigger>
-          <TabsTrigger value="footer">Footer</TabsTrigger>
-          <TabsTrigger value="hero">Hero</TabsTrigger>
-          <TabsTrigger value="brands">Brands</TabsTrigger>
-          <TabsTrigger value="blog">Blog</TabsTrigger>
-          <TabsTrigger value="aiscout">AI Scout</TabsTrigger>
-          <TabsTrigger value="categories">Categories</TabsTrigger>
-        </TabsList>
+        <div className="flex items-center justify-between">
+          <TabsList className="flex flex-wrap h-auto gap-2 bg-transparent justify-start">
+            <TabsTrigger value="header" className="data-[state=active]:bg-primary flex-1 sm:flex-none">Header</TabsTrigger>
+            <TabsTrigger value="hero" className="data-[state=active]:bg-primary flex-1 sm:flex-none">Hero</TabsTrigger>
+            <TabsTrigger value="aiscout" className="data-[state=active]:bg-primary flex-1 sm:flex-none">AI Scout</TabsTrigger>
+            <TabsTrigger value="categories" className="data-[state=active]:bg-primary flex-1 sm:flex-none">Categories</TabsTrigger>
+            <TabsTrigger value="brands" className="data-[state=active]:bg-primary flex-1 sm:flex-none">Brands</TabsTrigger>
+            <TabsTrigger value="blog" className="data-[state=active]:bg-primary flex-1 sm:flex-none">Blog</TabsTrigger>
+            <TabsTrigger value="footer" className="data-[state=active]:bg-primary flex-1 sm:flex-none">Footer</TabsTrigger>
+            <TabsTrigger value="theme" className="data-[state=active]:bg-primary flex-1 sm:flex-none">Theme</TabsTrigger>
+          </TabsList>
+          <Button onClick={save} disabled={saving} className="whitespace-nowrap ml-4">
+            <Save className="mr-2 h-4 w-4" /> {saving ? "Saving…" : "Save All"}
+          </Button>
+        </div>
 
         {/* ── Header ─────────────────────── */}
         <TabsContent value="header">
@@ -218,6 +224,32 @@ export default function AdminSiteContent() {
                 <Button variant="outline" size="sm" className="mt-2" onClick={() => {
                   update("footer", { ...content.footer, columns: [...content.footer.columns, { title: "", links: [] }] });
                 }}><Plus className="mr-1 h-4 w-4" /> Add Column</Button>
+              </div>
+              <div className="pt-4 border-t border-border">
+                <Label>Social Links</Label>
+                <div className="mt-2 space-y-2">
+                  {content.footer.socialLinks.map((link, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <Input placeholder="Icon name (e.g., twitter, instagram, facebook)" value={link.icon} onChange={(e) => {
+                        const links = [...content.footer.socialLinks];
+                        links[i] = { ...links[i], icon: e.target.value };
+                        update("footer", { ...content.footer, socialLinks: links });
+                      }} />
+                      <Input placeholder="URL" value={link.url} onChange={(e) => {
+                        const links = [...content.footer.socialLinks];
+                        links[i] = { ...links[i], url: e.target.value };
+                        update("footer", { ...content.footer, socialLinks: links });
+                      }} />
+                      <Button variant="ghost" size="icon" onClick={() => {
+                        const links = content.footer.socialLinks.filter((_, j) => j !== i);
+                        update("footer", { ...content.footer, socialLinks: links });
+                      }}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                    </div>
+                  ))}
+                  <Button variant="outline" size="sm" onClick={() => update("footer", { ...content.footer, socialLinks: [...content.footer.socialLinks, { icon: "", url: "" }] })}>
+                    <Plus className="mr-1 h-4 w-4" /> Add Social Link
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -400,6 +432,36 @@ export default function AdminSiteContent() {
               <Button variant="outline" size="sm" onClick={() => update("categories", [...content.categories, { name: "", description: "", count: 0, order: content.categories.length }])}>
                 <Plus className="mr-1 h-4 w-4" /> Add Category
               </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="theme">
+          <Card>
+            <CardHeader>
+              <CardTitle>Theme Colors (HSL format)</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="bg-muted/50 p-4 rounded-md mb-4 text-sm text-muted-foreground">
+                Enter colors in HSL format without the function wrapper. Example: <code>207 88% 50%</code>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {Object.entries(content.theme || defaultSiteContent.theme!).map(([key, val]) => (
+                  <div key={key} className="space-y-2">
+                    <Label className="capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        value={val}
+                        onChange={(e) => {
+                          const newTheme = { ...(content.theme || defaultSiteContent.theme!), [key]: e.target.value };
+                          update("theme", newTheme);
+                        }}
+                      />
+                      <div className="w-10 h-10 rounded border border-border shrink-0" style={{ backgroundColor: `hsl(${val})` }} title="Color Preview" />
+                    </div>
+                  </div>
+                ))}
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

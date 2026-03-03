@@ -1,9 +1,20 @@
-import { Search, Menu, X } from "lucide-react";
+import { Search, Menu, X, Instagram, Facebook, Youtube, Github, Linkedin, Link as LinkIcon } from "lucide-react";
+import { XIcon } from "@/components/icons/XIcon";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useSiteContent } from "@/hooks/useSiteContent";
+
+const IconMap: Record<string, any> = {
+  twitter: XIcon,
+  x: XIcon,
+  instagram: Instagram,
+  facebook: Facebook,
+  youtube: Youtube,
+  github: Github,
+  linkedin: Linkedin
+};
 
 export function PublicHeader() {
   const location = useLocation();
@@ -39,18 +50,27 @@ export function PublicHeader() {
               {l.label}
             </Link>
           ))}
+          {content.footer.socialLinks?.length > 0 && (
+            <div className="flex items-center gap-3 border-l border-border pl-6 ml-2">
+              {content.footer.socialLinks.map((social, i) => {
+                const Icon = IconMap[social.icon.toLowerCase()] || LinkIcon;
+                const href = social.url.startsWith("http") ? social.url : `https://${social.url}`;
+                return (
+                  <a key={i} href={href} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                    <Icon className="h-4 w-4" />
+                    <span className="sr-only">{social.icon}</span>
+                  </a>
+                );
+              })}
+            </div>
+          )}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Search sneakers..." className="w-48 bg-secondary pl-8 text-sm" />
-          </div>
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileOpen(!mobileOpen)}>
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
         </div>
-
-        <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileOpen(!mobileOpen)}>
-          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </Button>
       </div>
 
       {mobileOpen && (
@@ -61,6 +81,21 @@ export function PublicHeader() {
               {l.label}
             </Link>
           ))}
+
+          {content.footer.socialLinks?.length > 0 && (
+            <div className="flex items-center gap-4 py-4 mt-2 border-t border-border">
+              {content.footer.socialLinks.map((social, i) => {
+                const Icon = IconMap[social.icon.toLowerCase()] || LinkIcon;
+                const href = social.url.startsWith("http") ? social.url : `https://${social.url}`;
+                return (
+                  <a key={i} href={href} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                    <Icon className="h-5 w-5" />
+                    <span className="sr-only">{social.icon}</span>
+                  </a>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
     </header>

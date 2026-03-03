@@ -2,6 +2,18 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useSiteContent } from "@/hooks/useSiteContent";
+import { Instagram, Facebook, Youtube, Github, Linkedin, Link as LinkIcon } from "lucide-react";
+import { XIcon } from "@/components/icons/XIcon";
+
+const IconMap: Record<string, any> = {
+  twitter: XIcon,
+  x: XIcon,
+  instagram: Instagram,
+  facebook: Facebook,
+  youtube: Youtube,
+  github: Github,
+  linkedin: Linkedin
+};
 
 export function PublicFooter() {
   const { content } = useSiteContent();
@@ -44,8 +56,23 @@ export function PublicFooter() {
           </div>
         </div>
       </div>
-      <div className="container mx-auto mt-8 border-t border-border px-4 pt-6">
+      <div className="container mx-auto mt-8 border-t border-border px-4 pt-6 flex flex-col items-center justify-between gap-4 md:flex-row">
         <p className="text-center text-xs text-muted-foreground">{footer.copyright}</p>
+
+        {footer.socialLinks && footer.socialLinks.length > 0 && (
+          <div className="flex items-center gap-4">
+            {footer.socialLinks.map((social, i) => {
+              const Icon = IconMap[social.icon.toLowerCase()] || LinkIcon;
+              const href = social.url.startsWith("http") ? social.url : `https://${social.url}`;
+              return (
+                <a key={i} href={href} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                  <Icon className="h-5 w-5" />
+                  <span className="sr-only">{social.icon}</span>
+                </a>
+              );
+            })}
+          </div>
+        )}
       </div>
     </footer>
   );

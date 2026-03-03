@@ -75,7 +75,21 @@ export interface CategoryItem {
   order: number;
 }
 
+export interface ThemeSettings {
+  background: string;
+  foreground: string;
+  primary: string;
+  primaryForeground: string;
+  card: string;
+  cardForeground: string;
+  muted: string;
+  mutedForeground: string;
+  border: string;
+  radius: string;
+}
+
 export interface SiteContent {
+  theme?: ThemeSettings;
   header: HeaderContent;
   footer: FooterContent;
   hero: HeroContent;
@@ -88,6 +102,18 @@ export interface SiteContent {
 // ── Defaults ───────────────────────────────────────────
 
 export const defaultSiteContent: SiteContent = {
+  theme: {
+    background: "210 30% 8%",
+    foreground: "210 20% 95%",
+    primary: "207 88% 50%",
+    primaryForeground: "0 0% 100%",
+    card: "210 25% 12%",
+    cardForeground: "210 20% 95%",
+    muted: "210 18% 18%",
+    mutedForeground: "210 12% 55%",
+    border: "210 15% 20%",
+    radius: "0.75rem"
+  },
   header: {
     logoInitials: "1S",
     logoText: "100 Sneaker",
@@ -121,7 +147,11 @@ export const defaultSiteContent: SiteContent = {
       },
     ],
     copyright: "© 2026 100 Sneaker. All rights reserved.",
-    socialLinks: [],
+    socialLinks: [
+      { icon: "instagram", url: "https://instagram.com" },
+      { icon: "facebook", url: "https://facebook.com" },
+      { icon: "twitter", url: "https://twitter.com" },
+    ],
   },
   hero: {
     badge: "AI-Powered Deals",
