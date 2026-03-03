@@ -1,6 +1,13 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+// Initialize lazily to prevent crashing the entire app if the API key is missing
+function getAIClient() {
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    if (!apiKey) {
+        throw new Error("Gemini API key is missing. Please configure VITE_GEMINI_API_KEY in your environment variables.");
+    }
+    return new GoogleGenAI({ apiKey });
+}
 
 export interface DealResult {
     name: string;
@@ -41,6 +48,7 @@ Rules:
 - Always include real, working URLs from your search results`;
 
 export async function scoutDeals(query: string): Promise<ScoutResponse> {
+    const ai = getAIClient();
     const response = await ai.models.generateContent({
         model: "gemini-2.0-flash",
         contents: `Find me the best current deals for: ${query}`,
