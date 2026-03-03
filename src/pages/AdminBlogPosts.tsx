@@ -136,11 +136,20 @@ export default function AdminBlogPosts() {
       const textContent = doc.body?.innerText || doc.documentElement.innerText || "";
       const autoExcerpt = textContent.replace(/\s+/g, ' ').trim().substring(0, 150) + (textContent.length > 150 ? "..." : "");
 
+      // Extract the first image to use as the Featured Image
+      const firstImage = doc.querySelector("img")?.src || "";
+
       // Open the create modal with populated data
       resetForm();
       setTitle(pageTitle);
       setContent(pageContent);
       setExcerpt(autoExcerpt);
+
+      if (firstImage) {
+        setImageUrl(firstImage);
+        setImagePreview(firstImage);
+      }
+
       setHtmlMode(true); // Open in HTML mode by default since it's an import
       setDialogOpen(true);
 
