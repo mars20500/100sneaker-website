@@ -110,6 +110,48 @@ export default function AdminBlogPosts() {
     }
   };
 
+  const handleImportHtml = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const file = files[0];
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      const htmlContent = event.target?.result as string;
+      if (!htmlContent) return;
+
+      // Extract title from <h1> or <title> if possible
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlContent, "text/html");
+      const pageTitle = doc.querySelector("h1")?.innerText || doc.title || file.name.replace(".html", "");
+
+      // Extract body content (fallback to full HTML if no body tag)
+      let pageContent = htmlContent;
+      if (doc.body && doc.body.innerHTML) {
+        pageContent = doc.body.innerHTML;
+      }
+
+      // Auto-generate excerpt from text content
+      const textContent = doc.body?.innerText || doc.documentElement.innerText || "";
+      const autoExcerpt = textContent.replace(/\s+/g, ' ').trim().substring(0, 150) + (textContent.length > 150 ? "..." : "");
+
+      // Open the create modal with populated data
+      resetForm();
+      setTitle(pageTitle);
+      setContent(pageContent);
+      setExcerpt(autoExcerpt);
+      setHtmlMode(true); // Open in HTML mode by default since it's an import
+      setDialogOpen(true);
+
+      // Reset the file input so the same file can be selected again
+      e.target.value = "";
+    };
+
+    reader.readAsText(file);
+  };
+
+
   const handleSave = async () => {
     if (!title.trim() || !content.trim()) {
       toast({ title: "Validation", description: "Title and content are required", variant: "destructive" });
@@ -178,9 +220,26 @@ export default function AdminBlogPosts() {
           <h1 className="text-2xl font-bold">Blog Posts</h1>
           <p className="text-sm text-muted-foreground">Create and manage your blog content</p>
         </div>
-        <Button onClick={openCreate}>
-          <Plus className="mr-2 h-4 w-4" /> New Post
-        </Button>
+        <div className="flex gap-2">
+          <div>
+            <input
+              type="file"
+              id="html-import"
+              accept=".html"
+              className="hidden"
+              onChange={handleImportHtml}
+            />
+            <Label
+              htmlFor="html-import"
+              className="flex h-10 items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer"
+            >
+              <FileText className="mr-2 h-4 w-4" /> Import HTML
+            </Label>
+          </div>
+          <Button onClick={openCreate}>
+            <Plus className="mr-2 h-4 w-4" /> New Post
+          </Button>
+        </div>
       </div>
 
       <Card>
